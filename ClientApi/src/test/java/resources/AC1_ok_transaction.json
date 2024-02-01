@@ -3,6 +3,5 @@
   "amount":50.00,
   "sourceAccountId":1,
   "targetAccountId":2,
-  "currency":"EUR",
-  "createdAt":"2024-01-31T11:37:33.676+00:00"
+  "currency":"EUR"
 }

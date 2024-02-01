@@ -30,12 +30,11 @@ public class TransactionController {
         try {
             responseEntity = restTemplate.exchange(apiUrl, HttpMethod.POST, request, TransactionResponse.class);
         } catch (HttpClientErrorException ex) {
-            // Handle 400 Bad Request (e.g., InsufficientFundsException)
             if (ex.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 return ResponseEntity.badRequest().body(ex.getResponseBodyAsString());
             }
             if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
-                return ResponseEntity.badRequest().body(ex.getResponseBodyAsString());
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getResponseBodyAsString());
             }
         }
         return responseEntity;

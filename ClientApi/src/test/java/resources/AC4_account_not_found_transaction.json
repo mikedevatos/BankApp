@@ -1,0 +1,7 @@
+{
+  "id":1,
+  "amount":500.00,
+  "sourceAccountId":11,
+  "targetAccountId":2,
+  "currency":"EUR"
+}

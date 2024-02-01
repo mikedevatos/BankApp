@@ -68,16 +68,16 @@ public class TransactionApiClientTest {
     public void testAC3TransactionAndExpectBadRequest() {
         mockMvc.perform(post("/api/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytesFromPath(new ClassPathResource("/src/test/java/resources/AC2_Insufficient_balance_bad_request.json").getPath()))
+                        .content(bytesFromPath(new ClassPathResource("/src/test/java/resources/AC3_same_account_bad_request_transaction.json").getPath()))
                 )
                 .andExpect(status().isBadRequest());
     }
     @Test
     @SneakyThrows
-    public void testAC4TransactionAndExpectBadRequest() {
+    public void testAC4TransactionAndExpectNotFound() {
         mockMvc.perform(post("/api/transaction")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(bytesFromPath(new ClassPathResource("/src/test/java/resources/AC2_Insufficient_balance_bad_request.json").getPath()))
+                        .content(bytesFromPath(new ClassPathResource("/src/test/java/resources/AC4_account_not_found_transaction.json").getPath()))
                 )
                 .andExpect(status().isNotFound());
     }

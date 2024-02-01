@@ -3,9 +3,11 @@ package com.example.bank.api.service;
 import com.example.bank.api.exception.AccountNotFoundException;
 import com.example.bank.api.exception.InsufficientFundsException;
 import com.example.bank.api.exception.SameAccountException;
+import com.example.bank.api.model.Transaction;
 import com.example.bank.api.projection.AccountInfo;
 import com.example.bank.api.repo.AccountRepo;
 import com.example.bank.api.model.Account;
+import com.example.bank.api.repo.TransactionRepo;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,25 +23,25 @@ public class AccountService {
     @Autowired
     AccountRepo accountRepo;
 
+    @Autowired
+    TransactionRepo transactionRepo;
 
-  public Account getAccountById(Long id){
-       return accountRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Account with ID " + id + " not found"));
+    public Account getAccountById(Long id) {
+        return accountRepo.findById(id).orElseThrow(() -> new NoSuchElementException("Account with ID " + id + " not found"));
     }
 
 
-    public AccountInfo getAcoountBalanceById(Long id){
-      return accountRepo.getAccountById(id).orElseThrow(() -> new NoSuchElementException("Account with ID " + id + " not found"));
+    public AccountInfo getAcoountBalanceById(Long id) {
+        return accountRepo.getAccountBalanceById(id).orElseThrow(() -> new NoSuchElementException("Account with ID " + id + " not found"));
     }
 
-  private boolean accountExist(Long accountId){
-    return   accountRepo.existsById(accountId);
-  }
-
-
+    private boolean accountExist(Long accountId) {
+        return accountRepo.existsById(accountId);
+    }
 
 
     @Transactional
-    public void transferFunds(Long sourceAccountId, Long targetAccountId, BigDecimal amount) {
+    public void transferFunds(Long sourceAccountId, Long targetAccountId, BigDecimal amount,String currency) {
         if (accountExist(sourceAccountId) && accountExist(targetAccountId)) {
 
 
@@ -49,8 +51,13 @@ public class AccountService {
             if (sourceAccount.getBalance().compareTo(amount) >= 0 && sourceAccount != targetAccount) {
                 targetAccount.setBalance(targetAccount.getBalance().subtract(amount));
                 sourceAccount.setBalance(sourceAccount.getBalance().add(amount));
-                accountRepo.save(sourceAccount);
-                accountRepo.save(targetAccount);
+//                accountRepo.save(sourceAccount);
+//                accountRepo.save(targetAccount);
+                Transaction transaction = Transaction.builder().targetAccount(targetAccount)
+                                                                .sourceAccount(sourceAccount)
+                                                     .amount(amount).currency(currency).build();
+               transactionRepo.save(transaction);
+
             } else {
                 // AC3
                 if (sourceAccount == targetAccount) {
@@ -63,8 +70,7 @@ public class AccountService {
             }
 
 
-        }
-        else{
+        } else {
             throw new AccountNotFoundException("Account not found");
 
         }

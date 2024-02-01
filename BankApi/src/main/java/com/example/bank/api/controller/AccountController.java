@@ -23,31 +23,29 @@ public class AccountController {
     @PostMapping()
     public ResponseEntity<?> transferFunds(@RequestBody TransactionDto transactionDto) {
 
-            try {
-                acoountService.transferFunds(transactionDto.getSourceAccountId(),
-                        transactionDto.getTargetAccountId(),
-                        transactionDto.getAmount());
-            } catch (InsufficientFundsException ex) {
-                // Handle InsufficientFundsException
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-            } catch (AccountNotFoundException ex) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-            } catch (SameAccountException ex) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-            }
+        try {
+            acoountService.transferFunds(transactionDto.getSourceAccountId(),
+                    transactionDto.getTargetAccountId(),
+                    transactionDto.getAmount(), transactionDto.getCurrency());
+        } catch (InsufficientFundsException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        } catch (AccountNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        } catch (SameAccountException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
 
-
-
+           TransactionResponse transactionRes = new TransactionResponse();
+        transactionRes.setSourceAccountBalance(acoountService.getAcoountBalanceById(transactionDto.getSourceAccountId()).getBalance());
 
         TransactionResponse transactionResponse = TransactionResponse.builder().id(transactionDto.getId())
                 .targetAccountId(transactionDto.getTargetAccountId())
                 .sourceAccountId(transactionDto.getSourceAccountId())
                 .amount(transactionDto.getAmount())
-                .createdAt(transactionDto.getCreatedAt())
+                .currency(transactionDto.getCurrency())
                 .sourceAccountBalance(acoountService.getAcoountBalanceById(transactionDto.getSourceAccountId()).getBalance()).build();
 
 
-//        log.debug("showing   customers page  "+page +"  and size  " + size);
         return new ResponseEntity<>(transactionResponse, HttpStatus.OK);
 
     }

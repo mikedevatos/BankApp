@@ -19,7 +19,7 @@ public class TransactionResponse implements Serializable {
     private Long sourceAccountId;
     private Long targetAccountId;
     private BigDecimal sourceAccountBalance;
-    private Timestamp createdAt;
+    private String currency;
 
 
 }

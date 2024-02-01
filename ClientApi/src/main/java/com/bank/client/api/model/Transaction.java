@@ -17,6 +17,5 @@ public class Transaction implements Serializable {
     private Long sourceAccountId;
     private Long targetAccountId;
     private String currency;
-    private Timestamp createdAt;
 
 }

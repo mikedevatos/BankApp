@@ -1,17 +1,17 @@
 package com.example.bank.api.dto;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransactionResponse implements Serializable {
 
     private Long id;
@@ -19,7 +19,7 @@ public class TransactionResponse implements Serializable {
     private Long sourceAccountId;
     private Long targetAccountId;
     private BigDecimal sourceAccountBalance;
-    private Timestamp createdAt;
+    private String currency;
 
 
 }

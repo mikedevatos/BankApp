@@ -37,7 +37,6 @@ public class TransactionController {
             if (ex.getStatusCode().equals(HttpStatus.NOT_FOUND)) {
                 return ResponseEntity.badRequest().body(ex.getResponseBodyAsString());
             }
-            String abc = "abc";
         }
         return responseEntity;
 

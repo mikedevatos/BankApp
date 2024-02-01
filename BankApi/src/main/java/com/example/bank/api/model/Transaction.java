@@ -1,32 +1,40 @@
 package com.example.bank.api.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 @Builder
-//@Entity
-//@Table(name="TransactionProcessor")
+@Entity
+@Table(name="transaction")
 @Getter
 @Setter
-public class Transaction {
+@AllArgsConstructor
+@NoArgsConstructor
+public class Transaction implements Serializable {
 
-
-
-
-//    @Column(name = "id", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
+
+    @ManyToOne
+    @JoinColumn(name = "source_account_id", referencedColumnName = "id")
+    private Account sourceAccount;
+
+    @ManyToOne
+    @JoinColumn(name = "target_account_id", referencedColumnName = "id")
+    private Account targetAccount;
+
+
     private BigDecimal amount;
-    private Long sourceAccountId;
 
-    private Long targetAccountId;
 
-//    @CreationTimestamp
-    private Timestamp createdAt;
-
+   private String currency;
 
 }

@@ -4,7 +4,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -13,13 +15,11 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 @Getter
 @Setter
-
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransactionDto implements Serializable {
 
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
     private Long id;
 
     private BigDecimal amount;
@@ -27,7 +27,6 @@ public class TransactionDto implements Serializable {
 
     private Long targetAccountId;
 
-    @CreationTimestamp
-    private Timestamp createdAt;
+    private String currency;
 
 }
